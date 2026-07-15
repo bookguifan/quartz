@@ -7,7 +7,7 @@ configuration:
   analytics:
     provider: plausible
   locale: en-US
-  baseUrl: https://gfbj.gitee.io/quartz
+  baseUrl: https://quartz1.1985515008.workers.dev/
   ignorePatterns:
     - private
     - templates
