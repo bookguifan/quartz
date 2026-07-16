@@ -1,6 +1,19 @@
+---
+title: 闭包与装饰器（AI增强版）
+date:
+study_time:
+review_version: v3.6
+publish: true
+category: Python基础
+difficulty: 🔺难点
+tags:
+  - 学习笔记
+  - Python基础
+  - 闭包
+  - 装饰器
+status: 完善
+---
 # [day08] 学习笔记｜闭包、装饰器与深浅拷贝（AI 增强版）
-
-**📅 日期**：未提供 **⏱ 学习时长**：未提供 **🔧 AI 审核版本**：v3.6
 
 ## 📌 核心速览
 

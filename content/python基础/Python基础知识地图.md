@@ -1,3 +1,17 @@
+---
+title: Python基础知识地图
+date:
+study_time:
+review_version: v3.6
+publish: true
+category: Python基础
+difficulty: 🔹基础
+tags:
+  - 学习笔记
+  - Python基础
+  - 知识地图
+status: 完善
+---
 # Python 基础知识地图
 
 > 本知识地图覆盖 15 天 Python 基础增强版笔记的核心概念，提供一站式速查、学习路径导航与知识网络关联。建议配合具体笔记深入学习。

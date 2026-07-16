@@ -1,6 +1,19 @@
+---
+title: 类型转换与控制流（AI增强版）
+date:
+study_time:
+review_version: v3.6
+publish: true
+category: Python基础
+difficulty: 🔹基础
+tags:
+  - 学习笔记
+  - Python基础
+  - 类型转换
+  - 控制流
+status: 完善
+---
 # [day02] 学习笔记｜类型转换、运算符与控制流（AI 增强版）
-
-**📅 日期**：未提供 **⏱ 学习时长**：未提供 **🔧 AI 审核版本**：v3.6
 
 ## 📌 核心速览
 

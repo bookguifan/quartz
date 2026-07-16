@@ -1,6 +1,20 @@
+---
+title: 函数与文件异常处理（AI增强版）
+date:
+study_time:
+review_version: v3.6
+publish: true
+category: Python基础
+difficulty: 🔸核心
+tags:
+  - 学习笔记
+  - Python基础
+  - 函数
+  - 文件操作
+  - 异常处理
+status: 完善
+---
 # [day05] 学习笔记｜函数、文件 I/O 与异常处理（AI 增强版）
-
-**📅 日期**：未提供 **⏱ 学习时长**：未提供 **🔧 AI 审核版本**：v3.6
 
 ## 📌 核心速览
 

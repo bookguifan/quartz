@@ -1,6 +1,19 @@
+---
+title: 环境管理与HTTP基础（AI增强版）
+date:
+study_time:
+review_version: v3.6
+publish: true
+category: Python基础
+difficulty: 🔸核心
+tags:
+  - 学习笔记
+  - Python基础
+  - 环境管理
+  - HTTP
+status: 完善
+---
 # [day06] 学习笔记｜开发环境管理与 HTTP 基础（AI 增强版）
-
-**📅 日期**：未提供 **⏱ 学习时长**：未提供 **🔧 AI 审核版本**：v3.6
 
 ## 📌 核心速览
 

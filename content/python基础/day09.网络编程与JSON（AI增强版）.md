@@ -1,6 +1,19 @@
+---
+title: 网络编程与JSON（AI增强版）
+date:
+study_time:
+review_version: v3.6
+publish: true
+category: Python基础
+difficulty: 🔸核心
+tags:
+  - 学习笔记
+  - Python基础
+  - 网络编程
+  - JSON
+status: 完善
+---
 # [day09] 学习笔记｜网络编程与 JSON（AI 增强版）
-
-**📅 日期**：未提供 **⏱ 学习时长**：未提供 **🔧 AI 审核版本**：v3.6
 
 ## 📌 核心速览
 

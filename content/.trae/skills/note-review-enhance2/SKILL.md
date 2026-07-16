@@ -43,7 +43,7 @@ description: "Use when user provides raw study notes, learning materials, or cou
 
 | 验收项 | 通过标准 |
 |--------|---------|
-| 语法验收 | 7项全部通过（参见 `references/obsidian-format.md`） |
+| 语法验收 | 8项全部通过（参见 `references/obsidian-format.md`） |
 | 逻辑验收 | 11项全部通过（含概念完整性） |
 | 概念完整性 | 增强版 ≥ 原始笔记（不得简略） |
 | 图片资源 | 迁移成功 + 验证存在 + 清理未引用 + 无占位符 |
@@ -58,14 +58,25 @@ description: "Use when user provides raw study notes, learning materials, or cou
 | Step 2 | 概念完整性核对 | 内容增强前 | 回溯原始笔记，补全缺失概念 |
 | Step 3 | 知识正确性+代码可用性 | 审核纠错 | 用 `[!bug]` 标注并修正 |
 | Step 4 | 扩展块数量均衡性 | 补齐增强 | 补充至同级水平 |
-| Step 5 | 语法验收（7项）+ 逻辑验收（11项）+ 代码块语言标注 + 版本号一致性 | 结构化输出 | 修复后重新自检 |
+| Step 5 | 语法验收（8项）+ 逻辑验收（11项）+ 代码块语言标注 + 版本号一致性 | 结构化输出 | 修复后重新自检 |
 | Step 6 | 知识地图索引完整性 + XMind 编码/字体/class | 衍生输出 | 同步补充索引；修复编码和字体 |
 
 ## Core Pattern
 
 ### Step 1: 输入预处理
 1. 提取原始笔记中的所有概念、定义、流程、代码、图片引用
-2. **元数据推断**：若原笔记未标注日期/学习时长，尝试从文件修改时间或文件名推断；若无法推断，保留"未标注"并在"8️⃣ AI 附加说明"中提示用户补充
+2. **元数据推断与 Properties 构建**：为笔记构建 YAML frontmatter 属性（参见 `references/output-format.md` 1.2 节）。
+   - `title`：从 `#` 标题提取，去掉序号前缀（如 `[day02]`）
+   - `date`：优先使用原笔记日期；其次从文件修改时间或文件名推断（格式 YYYY-MM-DD）；无法推断则留空
+   - `study_time`：同上，无法推断则留空
+   - `review_version`：填入当前 Skill 版本号
+   - `publish`：默认 `false`
+   - `category`：从文件夹名或标签体系推断（如"深度学习""机器学习"）
+   - `difficulty`：根据笔记内难度标签分布判定——含🔺→`🔺难点`，否则含🔸→`🔸核心`，否则→`🔹基础`
+   - `tags`：从原笔记标签行提取，转为 YAML 列表格式（每项前加 `- `）
+   - `status`：默认 `完善`；若原笔记过于简略则用 `草稿`
+   - 无法推断的日期/时长**留空**（不填"未标注"），在"8️⃣ AI 附加说明"中提示用户补充
+   - 构建完 frontmatter 后，**删除**正文中旧的行内元数据行（`**📅 日期**`、`**⏱ 学习时长**`、`**🔧 AI 审核版本**`、`**🏷 标签**`）
 3. **重要性判断与清洗**：
    - **高重要性**：核心概念、关键代码、必要定义 → 必须保留
    - **中重要性**：扩展说明、重复但有助于理解的例子 → 可合并或精简
@@ -149,9 +160,11 @@ description: "Use when user provides raw study notes, learning materials, or cou
 
 ### Step 5: 结构化输出
 - 严格按输出格式骨架组织（参见 `references/output-format.md`）
-- 执行语法验收（7项）+ 逻辑验收（11项）
+- 执行语法验收（7项）+ 逻辑验收（11项）+ 属性验收
 - **代码块语言标注检查**：扫描全文，确保所有 ``` 后均有语言标注；无标注的一律补标为 `text`
-- **版本号一致性检查**：确认头部 `AI 审核版本` 与当前 Skill 版本一致
+- **版本号一致性检查**：确认 frontmatter 中 `review_version` 与当前 Skill 版本一致
+- **YAML frontmatter 完整性检查**：确认 `---` 分隔符正确、所有必填属性（title/review_version/publish/category/difficulty/tags/status）存在、tags 为列表格式
+- **行内元数据已迁移检查**：确认正文中不再有 `**📅 日期**`、`**⏱ 学习时长**`、`**🔧 AI 审核版本**`、`**🏷 标签**` 行
 - 输出最终笔记 + AI 附加说明
 
 ### Step 6: 可选衍生输出
@@ -243,6 +256,10 @@ description: "Use when user provides raw study notes, learning materials, or cou
 | XMind content.json 编码为 UTF-8 无 BOM | Windows 环境解析乱码 | 必须保存为 UTF-8 with BOM |
 | XMind Theme 缺少中文字体 | 中文显示为系统默认字体（宋体） | Theme 中配置中文字体回退栈 |
 | 系列笔记扩展块数量不均衡 | 部分笔记过浅，用户体验不一致 | 主动补充至同级水平 |
+| 未生成 YAML frontmatter | 元数据无法被 Obsidian Properties/Dataview 识别 | 所有增强版笔记必须以 frontmatter 开头 |
+| frontmatter 中 date 填"未标注" | Obsidian 属性面板显示异常 | 无法推断时留空（`date: `），不填文字 |
+| frontmatter 和标题间保留旧行内元数据 | 信息冗余，格式不统一 | 行内元数据迁移至 frontmatter 后删除原行 |
+| tags 用行内数组 `[a, b]` | 部分插件解析异常 | 必须使用 YAML 列表格式（`- a` / `- b`） |
 
 ### 用户反馈常见模式
 

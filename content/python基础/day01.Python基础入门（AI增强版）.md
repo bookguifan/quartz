@@ -1,6 +1,18 @@
+---
+title: Python基础入门（AI增强版）
+date:
+study_time:
+review_version: v3.6
+publish: true
+category: Python基础
+difficulty: 🔹基础
+tags:
+  - 学习笔记
+  - Python基础
+  - 计算机原理
+status: 完善
+---
 # [day01] 学习笔记｜Python 基础入门：计算机原理与语言核心（AI 增强版）
-
-**📅 日期**：未提供 **⏱ 学习时长**：未提供 **🔧 AI 审核版本**：v3.6
 
 ## 📌 核心速览
 

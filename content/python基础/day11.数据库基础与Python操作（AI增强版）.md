@@ -1,6 +1,20 @@
+---
+title: 数据库基础与Python操作（AI增强版）
+date:
+study_time:
+review_version: v3.6
+publish: true
+category: Python基础
+difficulty: 🔸核心
+tags:
+  - 学习笔记
+  - Python基础
+  - 数据库
+  - MySQL
+  - Redis
+status: 完善
+---
 # [day11] 学习笔记｜数据库基础与 Python 操作（AI 增强版）
-
-**📅 日期**：未提供 **⏱ 学习时长**：未提供 **🔧 AI 审核版本**：v3.6
 
 ## 📌 核心速览
 
