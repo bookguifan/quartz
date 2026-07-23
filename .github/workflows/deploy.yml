@@ -1,0 +1,56 @@
+name: Deploy Quartz v5 to GitHub Pages
+
+on:
+  # main分支推送代码时自动触发部署
+  push:
+    branches: [ main ]
+  # 支持手动在GitHub网页触发部署
+  workflow_dispatch:
+
+# Pages部署必备权限
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同一时间只允许一个部署任务运行，避免并发冲突
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 拉取仓库代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 安装Node.js（Quartz依赖node运行构建）
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 # Quartz v5推荐Node20，兼容性最好
+
+      - name: 安装依赖
+        run: npm i
+
+      - name: 执行Quartz构建，生成public静态站点
+        run: npx quartz build
+
+      - name: 上传构建产物public目录，供Pages部署
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    # 等待build构建完成再执行部署
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 部署到GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
