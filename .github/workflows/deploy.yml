@@ -21,24 +21,24 @@ jobs:
       - name: 拉取仓库代码
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0   # 完整历史，无需 unshallow
 
       - name: 安装Node.js（Quartz依赖node运行构建）
         uses: actions/setup-node@v4
         with:
-          node-version: 22   # Quartz v5 要求 Node >=22
+          node-version: 22
 
       - name: 更新npm到最新版本（支持 --allow-git）
         run: npm install -g npm@latest
 
-      - name: 配置 Git 使用 HTTPS 代替 SSH（避免鉴权问题）
+      - name: 配置 Git 使用 HTTPS 代替 SSH
         run: git config --global url."https://github.com/".insteadOf ssh://git@github.com/
 
       - name: 安装依赖（允许 Git 类型包）
         run: npm install --allow-git
 
-      - name: 执行Quartz构建，生成public静态站点
-        run: npx quartz build
+      - name: 安装 Quartz 插件并构建静态站点
+        run: npx quartz plugin install && npx quartz build   # ✅ 借鉴 Cloudflare 命令
 
       - name: 上传构建产物public目录，供Pages部署
         uses: actions/upload-pages-artifact@v3
