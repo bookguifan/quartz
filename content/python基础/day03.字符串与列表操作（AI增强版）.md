@@ -291,7 +291,7 @@ print(dir(__builtins__))
 **常见错误与规避**
 
 1. **遍历列表时修改列表**
-```
+```python
    # 错误！
    nums = [1, 2, 3, 4]
    for n in nums:

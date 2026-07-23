@@ -304,7 +304,7 @@ print(original)           # [1, 2, [3, 4, 5]]
    - 如果不改变复杂子对象，浅拷贝的值改变不会影响原值。
    - 但如果修改了复杂子对象（如内层列表），**会影响原对象**，因为内层对象共享引用。
 
-```python
+```
 # 情况1：无复杂子对象
 import copy
 a = [1, 2, 3]
@@ -317,14 +317,14 @@ a = [1, 2, [3, 4]]
 b = copy.copy(a)
 b[2].append(5)
 print(a)  # [1, 2, [3, 4, 5]] —— 原对象被影响！
-```
+```text
 
-```python
+```
 # 深拷贝
 deep = copy.deepcopy(original)
 deep[2].append(6)         # 不影响原对象
 print(original)           # [1, 2, [3, 4, 5]]
-```
+```text
 
 #### 避坑与局限
 
@@ -373,7 +373,7 @@ print(original)           # [1, 2, [3, 4, 5]]
 
 > **案例1：计时装饰器**
 
-```python
+```
 import time
 from functools import wraps
 
@@ -393,11 +393,11 @@ def slow_function():
     return "Done"
 
 slow_function()  # slow_function 耗时: 1.0012s
-```
+```text
 
 > **案例2：缓存装饰器（简化版 lru_cache）**
 
-```python
+```
 def memoize(func):
     cache = {}
     @wraps(func)
@@ -414,7 +414,7 @@ def fibonacci(n):
     return fibonacci(n - 1) + fibonacci(n - 2)
 
 print(fibonacci(100))  # 瞬间完成，因为缓存了中间结果
-```
+```text
 
 ---
 

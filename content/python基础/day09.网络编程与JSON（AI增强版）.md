@@ -257,6 +257,36 @@ if __name__ == '__main__':
 
 ## 3️⃣ 应用场景与扩展
 
+> [!note] 🛠️ 实战扩展（基础）
+> **TCP 粘包问题与解决方案**
+> TCP 是流式协议，数据没有明确边界，连续发送多个数据包时可能被合并接收（粘包）。
+>
+> **解决方案 1：固定消息头（推荐）**
+> 在每条消息前附加一个固定长度的头部，标识消息体长度。
+> ```python
+> def send_msg(sock, msg):
+>     data = msg.encode('utf-8')
+>     header = len(data).to_bytes(4, 'big')  # 4字节头部
+>     sock.sendall(header + data)
+>
+> def recv_msg(sock):
+>     import struct
+>     header = sock.recv(4)
+>     body_len = struct.unpack('!I', header)[0]
+>     body = b''
+>     while len(body) < body_len:
+>         chunk = sock.recv(body_len - len(body))
+>         if not chunk:
+>             break
+>         body += chunk
+>     return body.decode('utf-8')
+> ```
+>
+> **解决方案 2：特殊分隔符**
+> 在消息末尾添加特殊标记（如 `\n`），接收端按标记切分。适用于消息内容不含该标记的场景。
+>
+> **注意事项**：粘包是 TCP 协议特性而非缺陷，UDP 是面向消息的协议，不存在粘包问题。
+
 > **案例：简单的 JSON API 客户端**
 
 ```python
@@ -271,6 +301,37 @@ with urllib.request.urlopen(req) as response:
     print(f"GitHub API 当前用户：{data.get('current_user_url')}")
 ```
 
+> [!note] 🛠️ 实战扩展（进阶）
+> **JSON Schema 验证实战**
+> JSON Schema 是描述 JSON 数据结构规则的声明式语言，可确保 API 输入/输出的数据格式正确性。
+>
+> ```python
+> import json
+> from jsonschema import validate, ValidationError
+>
+> # 定义 Schema：用户信息必须包含 name、age
+> schema = {
+>     "type": "object",
+>     "required": ["name", "age"],
+>     "properties": {
+>         "name": {"type": "string", "minLength": 1},
+>         "age": {"type": "integer", "minimum": 0, "maximum": 150}
+>     }
+> }
+>
+> # 验证数据
+> user_data = {"name": "张三", "age": 25}
+> try:
+>     validate(instance=user_data, schema=schema)
+>     print("验证通过")
+> except ValidationError as e:
+>     print(f"验证失败：{e.message}")
+> ```
+>
+> **原理**：JSON Schema 将数据约束（类型、范围、格式、枚举等）表达为 JSON 字典，验证器按 Schema 规则递归检查数据树的每个节点，发现不匹配即抛出 `ValidationError`。
+>
+> **常见应用**：API 请求参数校验、配置文件格式检查、微服务间数据契约（Contract Testing）。
+
 ---
 
 ## 8️⃣ AI 附加说明
@@ -278,7 +339,7 @@ with urllib.request.urlopen(req) as response:
 - **组织方式**：AI 重排，将原笔记中字符集、JSON、网络编程整合为系统结构，去除绝对路径图片引用（已复制到 asset）。
 - **重要性判断摘要**：原笔记中缺少 TCP 三次握手/四次挥手的详细解释和粘包问题说明，已补充；新增端口复用和消息边界处理作为避坑内容。
 - **难度标签分布**：🔹 基础 1 处，🔸 核心 2 处。
-- **扩展块统计**：基础扩展 1 个（编码原理），进阶扩展 1 个（自定义 JSON 编码）。总知识点 N ≈ 3，比例符合规则。
+- **扩展块统计**：基础扩展 1 个（TCP 粘包问题及解决方案），进阶扩展 1 个（JSON Schema 验证实战）。总知识点 N ≈ 3，比例符合规则。
 - **代码库使用情况**：未使用。
 - **可能遗漏但可补充的主题**：UDP Socket 编程、`socketserver` 模块、`select`/`poll`/`epoll` 多路复用、WebSocket 协议。
 

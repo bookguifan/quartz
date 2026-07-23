@@ -208,6 +208,18 @@ print(a + c)   # [[11, 12, 13], [24, 25, 26]]
 > [!note] 💡 AI 扩展（进阶）
 > **广播原理**：NumPy 在内存中不实际复制小数组，而是通过步长技巧实现虚拟扩展，高效且省内存。
 > **避坑**：发生广播错误时，检查形状是否满足"从右向左对齐且相等或为1"。常见错误：形状 `(3,4)` 与 `(3,)` 无法广播（尾部 4 vs 3 不匹配且没有 1）。
+>
+> **内存布局**：`ndarray` 默认 C 顺序（行优先），转置可能产生非连续内存，影响性能。可用 `np.ascontiguousarray()` 优化。
+>
+> **NumPy 在深度学习中的角色**：
+> - PyTorch 的 `Tensor` 与 NumPy 的 `ndarray` 共享底层内存（通过 `torch.from_numpy()` 和 `.numpy()` 零拷贝互转）。
+> - 数据预处理阶段（归一化、标准化）通常先用 NumPy 完成。
+> - 批处理（batch）操作本质上是 NumPy 的多维数组操作。
+> ```python
+> import torch
+> np_arr = np.array([[1.0, 2.0], [3.0, 4.0]])
+> torch_tensor = torch.from_numpy(np_arr)  # 共享内存，零拷贝
+> ```
 
 **常用数学函数**
 
@@ -256,18 +268,6 @@ print(np.unique(arr))  # [1 2 3]
   ```
 - **视图 vs 副本**：切片返回的是视图（修改会影响原数组），需用 `.copy()` 显式复制。
 - **大数组避免循环**：使用向量化代替 `for` 循环，否则性能优势丧失。
-
-> [!note] 💡 AI 扩展（进阶）
-> **内存布局**：`ndarray` 默认 C 顺序（行优先），转置可能产生非连续内存，影响性能。可用 `np.ascontiguousarray()` 优化。
-> **NumPy 在深度学习中的角色**：
-> - PyTorch 的 `Tensor` 与 NumPy 的 `ndarray` 共享底层内存（通过 `torch.from_numpy()` 和 `.numpy()` 零拷贝互转）。
-> - 数据预处理阶段（归一化、标准化）通常先用 NumPy 完成。
-> - 批处理（batch）操作本质上是 NumPy 的多维数组操作。
-> ```python
-> import torch
-> np_arr = np.array([[1.0, 2.0], [3.0, 4.0]])
-> torch_tensor = torch.from_numpy(np_arr)  # 共享内存，零拷贝
-> ```
 
 ---
 
@@ -341,6 +341,9 @@ combined = pd.concat([df1, df3], ignore_index=True)
 > - **特征工程**：`pd.cut()` 连续值分箱、`pd.get_dummies()` One-Hot 编码、`df.apply()` 自定义特征转换。
 > - **时间序列**：`pd.to_datetime()` 解析时间、`resample()` 重采样、`shift()` 滞后特征（用于时序预测）。
 > - **数据清洗**：`drop_duplicates()` 去重、`replace()` 替换异常值、`interpolate()` 插值填充缺失值。
+>
+> **性能优化**：`pd.eval()` 和 `pd.query()` 可加速复杂表达式。对于亿级数据，建议配合 `dask` 或 `modin`。
+>
 > ```python
 > # One-Hot 编码示例
 > df = pd.DataFrame({'color': ['red', 'blue', 'red', 'green']})
@@ -357,9 +360,6 @@ combined = pd.concat([df1, df3], ignore_index=True)
 - **链式索引可能产生视图**：`df[df['age']>30]['name'] = 'new'` 通常无效，应使用 `.loc`：`df.loc[df['age']>30, 'name'] = 'new'`。
 - **`read_csv` 内存问题**：大文件用 `chunksize` 分块读取。
 - **`groupby` 的底层**：拆分 → 应用 → 合并。可使用自定义函数（`apply`）实现复杂分组逻辑。
-
-> [!note] 💡 AI 扩展（进阶）
-> **性能优化**：`pd.eval()` 和 `pd.query()` 可加速复杂表达式。对于亿级数据，建议配合 `dask` 或 `modin`。
 
 ---
 
@@ -623,7 +623,7 @@ plt.show()
   - 保留：数学基础铺垫（标量/向量/矩阵/特征值/SVD/张量）、NumPy 数学函数大表格、三剑客与大模型开发关联、课堂补充（字典底层）、详细避坑案例、SVD/电商/RAG 应用场景。
   - 新增：NumPy-PyTorch 零拷贝互转、Pandas `merge`/`concat`、One-Hot 编码与时间序列处理。
 - **难度标签分布**：🔹 基础 8 处，🔸 核心 3 处。
-- **扩展块统计**：基础扩展 5 个（数据分析四层次、大模型开发实战、三剑客分工、matplotlib 后端、字典底层），进阶扩展 4 个（SVD、广播内存布局、groupby 底层、NumPy-PyTorch 互转）。总知识点 N ≈ 25，比例符合规则。
+- **扩展块统计**：扩展块共 6 个（SVD、广播原理与 DL 角色、Pandas 预处理与性能优化、seaborn、大模型总结、字典底层）。总知识点 N ≈ 25，比例符合规则。
 - **代码库使用情况**：未使用（所有代码示例已嵌入知识点，无超过 20 行的综合示例）。
 - **可能遗漏但可补充的主题**：
   - 概率论基础（均值、方差、协方差）与 NumPy 统计函数

@@ -149,7 +149,7 @@ find . -name "*.py" -type f   # 查找当前目录下所有 Python 文件
 
 Linux 文件权限由 10 个字符表示：
 
-```
+```text
 -rwxr-xr--  1 alice dev  1234 Jan 15 10:00 script.py
 │└┬┘└┬┘└┬┘
 │ │  │  └── 其他用户权限: r--

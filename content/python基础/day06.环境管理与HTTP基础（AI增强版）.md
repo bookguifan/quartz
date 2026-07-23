@@ -222,6 +222,32 @@ Content-Length: 123
 
 ## 3️⃣ 应用场景与扩展
 
+> [!note] 🛠️ 实战扩展（基础）
+> **虚拟环境最佳实践**
+> 合理的虚拟环境管理是 Python 项目可复现、可部署的基石。
+>
+> **核心原则**：
+> 1. **一项目一环境**：每个项目使用独立的虚拟环境，避免依赖冲突。
+> 2. **锁定依赖版本**：使用 `pip freeze > requirements.txt` 或 `conda env export > environment.yml` 记录精确版本。
+> 3. **区分开发/生产依赖**：用多个 requirements 文件（如 `requirements-dev.txt`）分离测试库与生产依赖。
+> 4. **不提交环境文件夹**：将 `venv/` 或 `envs/` 加入 `.gitignore`。
+>
+> **工作流示例**：
+> ```bash
+> # 创建并激活环境
+> conda create -n myproject python=3.11
+> conda activate myproject
+>
+> # 安装依赖
+> conda install numpy pandas
+> pip install -r requirements.txt
+>
+> # 导出环境 → 他人可直接复现
+> pip freeze > requirements.txt
+> ```
+>
+> **避坑提示**：Windows 上若 `conda activate` 失效，先执行 `conda init` 并重启终端；`pip` 和 `conda` 混合使用时，优先用 conda 安装，conda 找不到再用 pip。
+
 > **案例：用 requests 发送 HTTP 请求**
 
 ```python
@@ -249,7 +275,7 @@ response = requests.get("https://api.example.com/protected", headers=headers)
 - **组织方式**：AI 重排，将原笔记中 Ollama、Conda、pip、HTTP 内容整合，去除与 Python 基础关联较弱的 Ollama 命令（属于 AI 工具使用，非 Python 核心知识）。
 - **重要性判断摘要**：原笔记中 HTTP 部分较零散，已系统化为"方法-状态码-头"三层结构；新增 RESTful 设计规范作为进阶扩展。
 - **难度标签分布**：🔹 基础 2 处，🔸 核心 2 处。
-- **扩展块统计**：基础扩展 1 个（Conda 工作流），进阶扩展 1 个（RESTful API 设计）。总知识点 N ≈ 4，比例符合规则。
+- **扩展块统计**：基础扩展 2 个（Conda 工作流、虚拟环境最佳实践），进阶扩展 1 个（RESTful API 设计）。总知识点 N ≈ 4，比例符合规则。
 - **代码库使用情况**：未使用。
 - **Ollama 基础概念**：Ollama 是本地运行大语言模型的工具，核心命令包括 `ollama list`（查看模型）、`ollama pull 模型名`（下载模型）、`ollama run 模型名`（运行模型）、`ollama ps`（查看运行中模型）、`ollama stop 模型名`（停止模型）。属于 AI 工具使用范畴，非 Python 核心知识，但与本课程 AI 辅助学习主题相关。
 - **可能遗漏但可补充的主题**：Docker 容器化、PyPI 包发布流程、HTTPS/TLS 加密原理、HTTP/2 和 HTTP/3 特性。
