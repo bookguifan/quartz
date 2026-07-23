@@ -41,7 +41,7 @@ jobs:
           git config --global url."https://github.com/".insteadOf ssh://git@github.com/
 
       - name: 安装依赖
-        run: npm i
+        run: npm i  --allow-git
 
       - name: 执行Quartz构建，生成public静态站点
         run: npx quartz build
