@@ -35,7 +35,7 @@ jobs:
         run: git config --global url."https://github.com/".insteadOf ssh://git@github.com/
 
       - name: 安装依赖（允许 Git 类型包）
-        run: npm install --allow-git
+        run: npm install --allow-all
 
       - name: 安装 Quartz 插件并构建静态站点
         run: npx quartz plugin install && npx quartz build   # ✅ 借鉴 Cloudflare 命令
