@@ -30,15 +30,15 @@ jobs:
       - name: 安装Node.js（Quartz依赖node运行构建）
         uses: actions/setup-node@v4
         with:
-          node-version: 22   # ✅ 修改为22，满足Quartz v5要求
+          node-version: 22   # ✅ 满足 Quartz v5 要求
 
       - name: 更新npm（确保版本满足要求）
         run: npm install -g npm@latest
 
-      - name: 配置 npm 允许 git 依赖
+      - name: 配置 npm 和 git 以允许 Git 依赖并使用 HTTPS
         run: |
           npm config set git true
-          npm config set git-protocol https
+          git config --global url."https://github.com/".insteadOf ssh://git@github.com/
 
       - name: 安装依赖
         run: npm i
