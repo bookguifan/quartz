@@ -1,15 +1,19 @@
 name: Deploy Quartz v5 to GitHub Pages
 
 on:
+  # main分支推送代码时自动触发部署
   push:
     branches: [ main ]
+  # 支持手动在GitHub网页触发部署
   workflow_dispatch:
 
+# Pages部署必备权限
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# 同一时间只允许一个部署任务运行，避免并发冲突
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -26,10 +30,15 @@ jobs:
       - name: 安装Node.js（Quartz依赖node运行构建）
         uses: actions/setup-node@v4
         with:
-          node-version: 22   # ✅ 改为22
+          node-version: 22   # ✅ 修改为22，满足Quartz v5要求
 
       - name: 更新npm（确保版本满足要求）
         run: npm install -g npm@latest
+
+      - name: 配置 npm 允许 git 依赖
+        run: |
+          npm config set git true
+          npm config set git-protocol https
 
       - name: 安装依赖
         run: npm i
@@ -43,6 +52,7 @@ jobs:
           path: ./public
 
   deploy:
+    # 等待build构建完成再执行部署
     needs: build
     runs-on: ubuntu-latest
     environment:
